@@ -6,6 +6,7 @@
 - Last Will로 offline 상태 자동 발행
 """
 
+import os
 import json
 import logging
 import time
@@ -25,7 +26,8 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
     handlers=[
-        logging.FileHandler('/var/log/sensor-publisher.log'),
+        os.makedirs(os.path.expanduser('~/logs'), exist_ok=True),
+        logging.FileHandler(os.path.expanduser('~/logs/sensor-publisher.log')),
         logging.StreamHandler()
     ]
 )
