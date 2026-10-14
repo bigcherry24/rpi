@@ -116,7 +116,7 @@ class SensorPublisher:
         """MQTT 연결 해제 콜백"""
         logger.warning(f"MQTT 브로커 연결 해제: {reason_code}")
 
-    def _on_publish(self, client, userdata, mid):
+    def _on_publish(self, client, userdata, mid, reason_code, properties):
         """MQTT 발행 완료 콜백"""
         logger.debug(f"MQTT 메시지 발행 완료: mid={mid}")
 
