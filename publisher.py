@@ -20,13 +20,12 @@ import paho.mqtt.client as mqtt
 from sensors.dht import DHT22Reader
 from sensors.distance import HC_SR04Reader
 
+os.makedirs(os.path.expanduser('~/logs'), exist_ok=True)
 
 # 로깅 설정
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
     handlers=[
-        os.makedirs(os.path.expanduser('~/logs'), exist_ok=True),
         logging.FileHandler(os.path.expanduser('~/logs/sensor-publisher.log')),
         logging.StreamHandler()
     ]
