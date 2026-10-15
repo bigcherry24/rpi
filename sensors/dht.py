@@ -6,10 +6,10 @@ import adafruit_dht
 logger = logging.getLogger(__name__)
 
 
-class DHT22Reader:
-    """DHT22 온도/습도 센서 (GPIO 4, 3핀 베어 센서)
+class DHT11Reader:
+    """DHT11 온도/습도 센서 (GPIO 4, 3핀 베어 센서)
 
-    - 최소 2초 간격으로만 읽을 수 있음
+    - 최소 1초 간격으로만 읽을 수 있음
     - 체크섬 오류 시 3회까지 재시도
     """
 
@@ -18,13 +18,13 @@ class DHT22Reader:
         self.retry_count = retry_count
         self.retry_delay = retry_delay
         self.last_read_time = 0
-        self.min_interval = 2.0  # DHT22는 최소 2초 간격 필요
+        self.min_interval = 1.0  # DHT11은 최소 1초 간격 필요
 
         try:
-            self.sensor = adafruit_dht.DHT22(gpio_pin)
-            logger.info(f"DHT22 센서 초기화 완료 (GPIO {gpio_pin})")
+            self.sensor = adafruit_dht.DHT11(gpio_pin)
+            logger.info(f"DHT11 센서 초기화 완료 (GPIO {gpio_pin})")
         except Exception as e:
-            logger.error(f"DHT22 센서 초기화 실패: {e}")
+            logger.error(f"DHT11 센서 초기화 실패: {e}")
             raise
 
     def read(self):
@@ -51,16 +51,16 @@ class DHT22Reader:
                     raise ValueError("센서 값이 None")
 
                 self.last_read_time = time.time()
-                logger.debug(f"DHT22: 온도={temp:.1f}°C, 습도={humidity:.1f}%")
+                logger.debug(f"DHT11: 온도={temp:.1f}°C, 습도={humidity:.1f}%")
                 return {"temperature": temp, "humidity": humidity}
 
             except Exception as e:
-                logger.warning(f"DHT22 읽기 시도 {attempt}/{self.retry_count} 실패: {e}")
+                logger.warning(f"DHT11 읽기 시도 {attempt}/{self.retry_count} 실패: {e}")
 
                 if attempt < self.retry_count:
                     time.sleep(self.retry_delay)
                 else:
-                    logger.error(f"DHT22 읽기 최종 실패 (3회 재시도 후)")
+                    logger.error(f"DHT11 읽기 최종 실패 (3회 재시도 후)")
                     return None
 
         return None
@@ -69,6 +69,6 @@ class DHT22Reader:
         """센서 리소스 해제"""
         try:
             self.sensor.exit()
-            logger.info("DHT22 센서 종료")
+            logger.info("DHT11 센서 종료")
         except Exception as e:
-            logger.warning(f"DHT22 센서 종료 중 오류: {e}")
+            logger.warning(f"DHT11 센서 종료 중 오류: {e}")
